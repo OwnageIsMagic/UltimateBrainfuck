@@ -15,7 +15,7 @@
 
 	<TextView
 		android:layout_height="wrap_content"
-		android:text="Stdin"
+		android:text="@string/Stdin"
 		android:layout_width="wrap_content"/>
 
 	<EditText
@@ -32,14 +32,14 @@
 
 		<Button
 			android:layout_height="wrap_content"
-			android:text="Exit"
+			android:text="@string/exit"
 			android:layout_width="wrap_content"
 			android:id="@+id/mainButtonExit"
 			android:onClick="clickExit"/>
 
 		<Button
 			android:layout_height="wrap_content"
-			android:text="Run"
+			android:text="@string/run"
 			android:layout_width="wrap_content"
 			android:onClick="clickRun"/>
 
@@ -53,7 +53,7 @@
 
 	<TextView
 		android:layout_height="wrap_content"
-		android:text="Result"
+		android:text="@string/result"
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:layout_width="match_parent"
 		android:id="@+id/mainTextViewResult"

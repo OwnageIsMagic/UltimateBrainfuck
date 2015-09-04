@@ -1,6 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 		<item android:id="@+id/menu_examples" android:orderInCategory="100" android:title="Examples" android:showAsAction="never" />
-		<item android:id="@+id/menu_interprete" android:orderInCategory="100" android:title="interprete" android:showAsAction="always" />
+	<item
+		android:id="@+id/menu_interprete"
+		android:orderInCategory="100"
+		android:title="interpret"
+		android:showAsAction="ifRoom" />
 		<item android:id="@+id/menu_settings" android:orderInCategory="100" android:title="settings" android:showAsAction="never" />
 		<item android:id="@+id/menu_customtextbf" android:orderInCategory="100" android:title="generate" android:showAsAction="never" />
 	</menu>
