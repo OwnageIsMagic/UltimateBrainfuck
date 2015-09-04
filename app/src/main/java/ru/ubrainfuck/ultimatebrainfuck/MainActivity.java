@@ -6,13 +6,16 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.*;
 
 public class MainActivity extends Activity
 {
     EditText form;
     TextView resultView;
+	EditText stdin;
     Toast toast;
     Interpreter interpreter;
+	Context context;
     /** Called when the activity is first created. */
     @Override
     public void onCreate( Bundle savedInstanceState )
@@ -22,18 +25,26 @@ public class MainActivity extends Activity
         //android:theme="@style/AppTheme>"
         form=(EditText) findViewById(R.id.mainEditTextInput);
         resultView=(TextView) findViewById(R.id.mainTextViewResult);
+		stdin=(EditText) findViewById(R.id.mainStdin);
         toast = Toast.makeText(this, "", Toast.LENGTH_LONG);
+		context=getApplicationContext();
     }
     public void clickRun(View view)
     {
+	
         String cmd=form.getText().toString();
-
+try {
         interpreter = new Interpreter(cmd);
-        resultView.setText(interpreter.eval());
+		interpreter.stdin=this.stdin.getText().toString();
+        resultView.setText("v+"+interpreter.eval());
         toast.setText(interpreter.eval());
         toast.show();
-    }
-    public void clickExit(View view) {finish();}
+    } catch (NullPointerException e) {toast.setText(e.toString());toast.show();}
+	}
+public void clickExit( View view )
+ {finish();}
+ 
+		public void startBFI (View v) { startActivity(new Intent(this, AnotherActivity.class));}
 
 //		public native String brainfF( );
 //
