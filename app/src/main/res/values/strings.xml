@@ -8,4 +8,6 @@
     <string name="exit">Exit</string>
     <string name="run">Run</string>
     <string name="result">Result</string>
+    <string name="BFI">BF I</string>
+    <string name="Source">Source</string>
 </resources>
