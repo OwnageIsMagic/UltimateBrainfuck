@@ -6,9 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import ru.ubrainfuck.ultimatebrainfuck.interpreter.Interpreter;
 
@@ -18,6 +18,7 @@ public class MainActivity extends Activity {
     TextView textView;
     TextView textView2;
     TextView textView3;
+    CheckBox checkBox;
     TextView textView4;
     TextView textView5;
     TextView textView6;
@@ -38,22 +39,35 @@ public class MainActivity extends Activity {
         textView = (TextView) findViewById(R.id.textView);
         textView2 = (TextView) findViewById(R.id.textView2);
         textView3 = (TextView) findViewById(R.id.textView3);
-        textView4 = (TextView) findViewById(R.id.textView4);
-        textView5 = (TextView) findViewById(R.id.textView5);
-        textView6 = (TextView) findViewById(R.id.textView6);
+        checkBox = (CheckBox) findViewById(R.id.checkBox);
+        // textView4 = (TextView) findViewById(R.id.textView4);
+        //   textView5 = (TextView) findViewById(R.id.textView5);
+        //   textView6 = (TextView) findViewById(R.id.textView6);
         //toast = Toast.makeText(this, "", Toast.LENGTH_LONG);
         context = getApplicationContext();
+        Interpreter.view = textView2;
         Interpreter.setContext(context);
     }
 
+    public void redraw() {
+        textView.setText(Interpreter.getStdOut());
+        textView2.setText(Interpreter.getStack());
+    }
+
     public void clickRun(View view) {
-        //Interpreter.setCmd();
-        textView.setText(Interpreter.eval(source.getText().toString()));
-        Interpreter.reset();
+        //Interpreter.reset();
+        if (checkBox.isChecked()) Interpreter.setDebuggable(true);
+        Interpreter.setCmd(source.getText().toString());
+        Interpreter.setStdIn(stdIn.getText().toString());
+        Interpreter.eval();
+        redraw();
     }
 
     public void clickView(View view) {
-        Toast.makeText(this, view.toString(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, view.toString(), Toast.LENGTH_LONG).show();
+        Interpreter.setCmd(source.getText().toString());
+        Interpreter.step();
+        redraw();
     }
 
     public void clickExit(View view) {
@@ -64,4 +78,7 @@ public class MainActivity extends Activity {
         startActivity(new Intent(this, AnotherActivity.class));
     }
 
+    public void reset(View v) {
+        Interpreter.reset();
+    }
 }
