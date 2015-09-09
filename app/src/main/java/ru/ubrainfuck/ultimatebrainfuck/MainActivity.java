@@ -52,6 +52,9 @@ public class MainActivity extends Activity {
     public void redraw() {
         textView.setText(Interpreter.getStdOut());
         textView2.setText(Interpreter.getStack());
+		textView3.setText("Stack pointer: "+Interpreter.getStackPointer()+
+		"\nCmdPointer: "+ Interpreter.getCmdPointer()+
+		"\nStdinPointer: "+ Interpreter.getStdinPointer());
     }
 
     public void clickRun(View view) {

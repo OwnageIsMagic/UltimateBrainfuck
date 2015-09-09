@@ -21,6 +21,7 @@ public class Interpreter {
 
     private static int[] stack = new int[stackSize];
     private static short stackPointer = 0;
+	private static int step = 0;
     private static int cmdPointer = 0;
     private static String cmd = "";
     private static String stdOut = "";
@@ -122,7 +123,7 @@ public class Interpreter {
                 stdOut += (char) stack[stackPointer];
                 break;
             case ',':
-                if (stdinPointer == stdIn.length() - 1) stack[stackPointer] = 0;
+                if (stdinPointer >= stdIn.length()) stack[stackPointer] = 0;
                 else {
                     stack[stackPointer] = (int) stdIn.charAt(stdinPointer);
                     stdinPointer++;
@@ -164,8 +165,11 @@ public class Interpreter {
             toaster("BRACKET ERROR");
             return "";
         }
+		step = 0;
         while (cmdPointer <= cmd.length() - 1) {
             step();
+			step++;
+			if (step>10000) {toaster("timeout");return "";}
             //view.setText(Interpreter.getStack());
         }
         return stdOut;
