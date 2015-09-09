@@ -46,11 +46,14 @@ public class MainActivity extends Activity {
     public void redraw() {
         textView.setText(Interpreter.getStdOut());
         textView2.setText(Interpreter.getStack());
-        textView3.setText(String.format("Stack pointer: %s\nCmdPointer: %d\nStdinPointer: %d\nStep: %d", Interpreter.getStackPointer(), Interpreter.getCmdPointer(), Interpreter.getStdinPointer(), Interpreter.getStep()));
+        textView3.setText(String.format("Stack pointer: %d\n" +
+                "Cmd Pointer:  %d\n" +
+                "Stdin Pointer: %d\n" +
+                "Step: %d", Interpreter.getStackPointer(), Interpreter.getCmdPointer(), Interpreter.getStdinPointer(), Interpreter.getStep()));
     }
 
     public void clickRun(View view) {
-        //Interpreter.reset();
+        Interpreter.reset();
         if (checkBox.isChecked()) Interpreter.setDebuggable(true);
         Interpreter.setCmd(source.getText().toString());
         Interpreter.setStdIn(stdIn.getText().toString());

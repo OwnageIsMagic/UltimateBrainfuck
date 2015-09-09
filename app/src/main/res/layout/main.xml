@@ -1,124 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:gravity="center"
-	android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="HardcodedText"
+    android:weightSum="1">
 
 	<EditText
-		android:layout_height="wrap_content"
+        android:layout_height="200dp"
 		android:inputType="textMultiLine"
 		android:layout_width="match_parent"
 		android:id="@+id/mainEditTextInput"
-		android:layout_weight="2.0"/>
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 	<TextView
 		android:layout_height="wrap_content"
 		android:text="Source"
-		android:layout_width="wrap_content" />
+        android:id="@+id/textSource"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/mainEditTextInput"
+        android:layout_centerHorizontal="true" />
 
 	<EditText
-		android:layout_height="wrap_content"
-		android:inputType="textMultiLine"
-		android:ems="10"
-		android:layout_width="wrap_content"
-		android:id="@+id/mainStdin"
-		android:hint="Stdin" />
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:layout_width="wrap_content"
+        android:id="@+id/mainStdin"
+        android:hint="Stdin"
+        android:layout_below="@+id/textSource"
+        android:layout_centerHorizontal="true" />
 
 	<LinearLayout
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/mainStdin"
+        android:id="@+id/mainButtonRow">
 
-		<CheckBox
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:id="@+id/checkBox"
-			android:checked="false" />
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBox"
+            android:checked="false" />
 
-		<Button
-			android:layout_height="wrap_content"
-			android:text="@string/exit"
-			android:layout_width="wrap_content"
-			android:id="@+id/mainButtonExit"
-			android:onClick="clickExit"/>
+        <Button
+            android:layout_height="wrap_content"
+            android:text="@string/exit"
+            android:layout_width="wrap_content"
+            android:id="@+id/mainButtonExit"
+            android:onClick="clickExit" />
 
-		<Button
-			android:layout_height="wrap_content"
-			android:text="@string/run"
-			android:layout_width="wrap_content"
-			android:onClick="clickRun"/>
+        <Button
+            android:layout_height="wrap_content"
+            android:text="@string/run"
+            android:layout_width="wrap_content"
+            android:onClick="clickRun"
+            android:id="@+id/mainButtonRun" />
 
-		<Button
-			android:layout_height="wrap_content"
-			android:text="BF I"
-			android:layout_width="wrap_content"
-			android:onClick="startBFI"/>
+        <Button
+            android:layout_height="wrap_content"
+            android:text="BF I"
+            android:layout_width="wrap_content"
+            android:onClick="startBFI"
+            android:id="@+id/mainButtonBFI" />
 
-		<Button
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="Reset"
-			android:id="@+id/button"
-			android:onClick="reset" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reset"
+            android:id="@+id/mainButtonReset"
+            android:onClick="reset" />
 
-	</LinearLayout>
+    </LinearLayout>
 
-	<TableLayout
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_weight="1.5"
-		android:orientation="horizontal"
-		android:showDividers="middle|beginning|end"
-		android:shrinkColumns="*">
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:singleLine="false"
+        android:hint="Output"
+        android:layout_below="@+id/mainButtonRow"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
-		<TableRow
-			android:layout_width="0dp"
-			android:layout_height="0dp"
-			android:layout_weight="1">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stack pointer: %d\nCmdPointer:    %d\nStdinPointer:  %d\nStep: %d"
+        android:id="@+id/textView3"
+        android:onClick="clickView"
+        android:clickable="true"
+        android:singleLine="false"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
-			<EditText
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:text="Output"
-				android:id="@+id/textView"
-				android:singleLine="false"
-				android:layout_weight="1"
-				android:onClick="clickView"
-				android:clickable="true"
-				android:editable="false" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stack"
+        android:id="@+id/textView2"
+        android:onClick="clickView"
+        android:clickable="true"
+        android:singleLine="false"
+        android:layout_below="@+id/textView"
+        android:layout_toRightOf="@+id/textView3"
+        android:layout_alignBottom="@+id/textView3"
+        android:layout_marginLeft="10dp" />
 
-			<TextView
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:text="Stack Pointer\nStdin Pointer\nStack Size"
-				android:id="@+id/textView3"
-				android:layout_weight="1"
-				android:onClick="clickView"
-				android:clickable="true"
-				android:singleLine="false" />
-
-		</TableRow>
-
-		<TableRow
-			android:layout_width="0dp"
-			android:layout_height="0dp"
-			android:layout_weight="1">
-
-			<TextView
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:text="Stack"
-				android:id="@+id/textView2"
-				android:layout_weight="1"
-				android:onClick="clickView"
-				android:clickable="true"
-				android:singleLine="false" />
-
-		</TableRow>
-
-	</TableLayout>
-
-</LinearLayout>
+</RelativeLayout>
 
