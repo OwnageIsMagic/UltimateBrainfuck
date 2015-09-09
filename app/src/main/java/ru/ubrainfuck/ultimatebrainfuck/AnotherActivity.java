@@ -24,8 +24,8 @@ public class AnotherActivity extends Activity {
 		setContentView(R.layout.anotheractivity);
 		setTitle("");
 		EditText sourceEdit = (EditText) findViewById(R.id.editText1);
-		sourceEdit.setBackgroundColor(-3355444);
-		findViewById(R.id.editText2).setBackgroundColor(-3355444);
+		sourceEdit.setBackgroundColor(0xFFCCCCCC);
+		findViewById(R.id.editText2).setBackgroundColor(0xFFCCCCCC);
 		hideKeyboard(sourceEdit);
 	}
 
@@ -33,8 +33,8 @@ public class AnotherActivity extends Activity {
 		((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(mEditView.getWindowToken(), 0);
 	}
 
-	public void Relist(ArrayList Arr) {
-		((ListView) findViewById(R.id.listView1)).setAdapter(new ArrayAdapter(this, 17367043, Arr));
+	public void Relist(ArrayList<Integer> Arr) {
+		((ListView) findViewById(R.id.listView1)).setAdapter(new ArrayAdapter<Integer>(this, android.R.layout.simple_list_item_1, Arr));
 	}
 
 	public boolean checkcode(final String Source) {
@@ -101,14 +101,14 @@ public class AnotherActivity extends Activity {
 	}
 
 	public void interpret(String Source) {
-		Integer CurrentArr = 0;
-		ArrayList<Integer> Arr = new ArrayList();
+		int CurrentArr = 0;
+		ArrayList<Integer> Arr = new ArrayList<Integer>();
 		EditText outputedit = (EditText) findViewById(R.id.editText2);
 		outputedit.setText("");
 		Arr.add(0);
 		Relist(Arr);
 		int inputCounter = 0;
-		Integer i = 0;
+		int i = 0;
 		int infiniteControl = 0;
 		while (i < Source.length()) {
 			infiniteControl++;
@@ -116,59 +116,70 @@ public class AnotherActivity extends Activity {
 				erroring_a_box("Timeout. " + infiniteControl);
 				return;
 			}
-			if (Source.charAt(i) == '>') {
-				if (Arr.size() - 1 == CurrentArr) {
-					CurrentArr = CurrentArr + 1;
-					Arr.add(0);
-				} else {
-					CurrentArr = CurrentArr + 1;
-				}
-			} else if (Source.charAt(i) == '<') {
-				if (CurrentArr == 0) {
-					CurrentArr = Arr.size() - 1;
-				} else {
-					CurrentArr = CurrentArr - 1;
-				}
-			} else if (Source.charAt(i) == '+') {
-				Arr.set(CurrentArr, Arr.get(CurrentArr) + 1);
-			} else if (Source.charAt(i) == '-') {
-				if (Arr.get(CurrentArr) != 0) {
-					Arr.set(CurrentArr, Arr.get(CurrentArr) - 1);
-				}
-			} else if (Source.charAt(i) == '.') {
-				outputedit.setText(String.valueOf(outputedit.getText().toString()) + (char) Arr.get(CurrentArr).intValue());
-			} else if (Source.charAt(i) == ',') {
-				if (inputCounter < this.input.length()) {
-					Arr.set(CurrentArr, (int) input.charAt(inputCounter));
-					inputCounter++;
-				} else {
-					Arr.set(CurrentArr, 0);
-				}
-			} else if (Source.charAt(i) == '[') {
-				if (Arr.get(CurrentArr) == 0) {
-					int loop = 1;
-					while (loop > 0) {
-						i = i + 1;
-						if (Source.charAt(i) == '[') {
-							loop++;
-						} else if (Source.charAt(i) == ']') {
-							loop--;
+			switch (Source.charAt(i)) {
+				case '>':
+					if (Arr.size() - 1 == CurrentArr) {
+						CurrentArr++;
+						Arr.add(0);
+					} else {
+						CurrentArr++;
+					}
+					break;
+				case '<':
+					if (CurrentArr == 0) {
+						CurrentArr = Arr.size() - 1;
+					} else {
+						CurrentArr--;
+					}
+					break;
+				case '+':
+					Arr.set(CurrentArr, Arr.get(CurrentArr) + 1);
+					break;
+				case '-':
+					if (Arr.get(CurrentArr) != 0) {
+						Arr.set(CurrentArr, Arr.get(CurrentArr) - 1);
+					}
+					break;
+				case '.':
+					outputedit.setText(String.valueOf(outputedit.getText().toString()) + (char) Arr.get(CurrentArr).intValue());
+					break;
+				case ',':
+					if (inputCounter < input.length()) {
+						Arr.set(CurrentArr, (int) input.charAt(inputCounter));
+						inputCounter++;
+					} else {
+						Arr.set(CurrentArr, 0);
+					}
+					break;
+				case '[':
+					if (Arr.get(CurrentArr) == 0) {
+						int loop = 1;
+						while (loop > 0) {
+							i++;
+							if (Source.charAt(i) == '[') {
+								loop++;
+							} else if (Source.charAt(i) == ']') {
+								loop--;
+							}
 						}
 					}
-				}
-			} else if (Source.charAt(i) == ']') {
-				int loop = 1;
-				while (loop > 0) {
-					i = i - 1;
-					if (Source.charAt(i) == '[') {
-						loop--;
-					} else if (Source.charAt(i) == ']') {
-						loop++;
+					break;
+				case ']':
+					int loop = 1;
+					while (loop > 0) {
+						i--;
+						if (Source.charAt(i) == '[') {
+							loop--;
+						} else if (Source.charAt(i) == ']') {
+							loop++;
+						}
 					}
-				}
-				i = i - 1;
+					i--;
+					break;
 			}
-			i = i + 1;
+			i++;
+
+
 		}
 		Relist(Arr);
 		hideKeyboard(outputedit);

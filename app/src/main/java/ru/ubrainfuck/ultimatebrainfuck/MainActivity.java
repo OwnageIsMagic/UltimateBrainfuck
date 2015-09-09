@@ -2,7 +2,6 @@ package ru.ubrainfuck.ultimatebrainfuck;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,8 +21,6 @@ public class MainActivity extends Activity {
     TextView textView4;
     TextView textView5;
     TextView textView6;
-    //Toast toast;
-    Context context;
 
     /**
      * Called when the activity is first created.
@@ -36,25 +33,20 @@ public class MainActivity extends Activity {
         //android:theme="@style/AppTheme>"
         source = (EditText) findViewById(R.id.mainEditTextInput);
         stdIn = (EditText) findViewById(R.id.mainStdin);
-        textView = (TextView) findViewById(R.id.textView);
+        textView = (EditText) findViewById(R.id.textView);
         textView2 = (TextView) findViewById(R.id.textView2);
         textView3 = (TextView) findViewById(R.id.textView3);
         checkBox = (CheckBox) findViewById(R.id.checkBox);
-        // textView4 = (TextView) findViewById(R.id.textView4);
-        //   textView5 = (TextView) findViewById(R.id.textView5);
-        //   textView6 = (TextView) findViewById(R.id.textView6);
-        //toast = Toast.makeText(this, "", Toast.LENGTH_LONG);
-        context = getApplicationContext();
-        Interpreter.view = textView2;
-        Interpreter.setContext(context);
+        //textView4 = (TextView) findViewById(R.id.textView4);
+        //textView5 = (TextView) findViewById(R.id.textView5);
+        //textView6 = (TextView) findViewById(R.id.textView6);
+        Interpreter.setContext(getApplicationContext());
     }
 
     public void redraw() {
         textView.setText(Interpreter.getStdOut());
         textView2.setText(Interpreter.getStack());
-		textView3.setText("Stack pointer: "+Interpreter.getStackPointer()+
-		"\nCmdPointer: "+ Interpreter.getCmdPointer()+
-		"\nStdinPointer: "+ Interpreter.getStdinPointer());
+        textView3.setText(String.format("Stack pointer: %s\nCmdPointer: %d\nStdinPointer: %d\nStep: %d", Interpreter.getStackPointer(), Interpreter.getCmdPointer(), Interpreter.getStdinPointer(), Interpreter.getStep()));
     }
 
     public void clickRun(View view) {

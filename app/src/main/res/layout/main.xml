@@ -78,7 +78,7 @@
 			android:layout_height="0dp"
 			android:layout_weight="1">
 
-			<TextView
+			<EditText
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
 				android:text="Output"
@@ -86,7 +86,8 @@
 				android:singleLine="false"
 				android:layout_weight="1"
 				android:onClick="clickView"
-				android:clickable="true" />
+				android:clickable="true"
+				android:editable="false" />
 
 			<TextView
 				android:layout_width="0dp"

@@ -1,15 +1,36 @@
 package ru.ubrainfuck.ultimatebrainfuck.interpreter;
 
 import android.content.Context;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /**
  * Created on 04.09.2015.
  */
+@SuppressWarnings("unused")
 public class Interpreter {
     private static Interpreter ourInstance = new Interpreter();
     private static int stackSize = 30000;
+
+    private static int[] stack = new int[stackSize];
+
+    private static int stackPointer = 0;
+    private static int step = 0;
+
+    private static int cmdPointer = 0;
+
+    private static String cmd = "";
+    private static String stdOut = "";
+    private static String stdIn = "";
+    private static int stdinPointer = 0;
+    private static boolean strict = false;
+    private static boolean debuggable = false;
+    private static Context context;
+
+    private Interpreter() {
+    }
+    public static Interpreter getInstance() {
+        return ourInstance;
+    }
 
     public static String getStack() {
         String out = "";
@@ -18,34 +39,19 @@ public class Interpreter {
         }
         return out;
     }
-
-    private static int[] stack = new int[stackSize];
-    private static short stackPointer = 0;
-	private static int step = 0;
-    private static int cmdPointer = 0;
-    private static String cmd = "";
-    private static String stdOut = "";
-    private static String stdIn = "";
-    private static int stdinPointer = 0;
-    private static boolean strict = false;
-    private static boolean debuggable = false;
-    private static Context context;
-    public static TextView view;
-
-    private Interpreter() {
-    }
-    public static Interpreter getInstance() {
-        return ourInstance;
-    }
-
     public static int getStackSize() {
         return stackSize;
     }
     public static void setStackSize(int stackSize) {
         Interpreter.stackSize = stackSize;
     }
-    public static short getStackPointer() {
+
+    public static int getStackPointer() {
         return stackPointer;
+    }
+
+    public static int getStep() {
+        return step;
     }
     public static void setStackPointer(short stackPointer) {
         Interpreter.stackPointer = stackPointer;
@@ -93,7 +99,6 @@ public class Interpreter {
         Toast.makeText(context, text, Toast.LENGTH_LONG).show();
     }
 
-
     public static void reset() {
         stack = new int[stackSize];
         cmdPointer = 0;
@@ -131,9 +136,8 @@ public class Interpreter {
                 break;
             case '[':
                 if (stack[stackPointer] == 0) {
-                    int brDeep = 1;
                     cmdPointer++;
-                    for (; brDeep != 0; cmdPointer++) {
+                    for (int brDeep = 1; brDeep != 0; cmdPointer++) {
                         if (cmd.charAt(cmdPointer) == '[') brDeep++;
                         else if (cmd.charAt(cmdPointer) == ']') brDeep--;
                     }
@@ -150,27 +154,32 @@ public class Interpreter {
                 }
                 break;
             case '>':
-                stackPointer++;
+                if (stackPointer == stackSize - 1) stackPointer = 0;
+                else stackPointer++;
                 break;
             case '<':
-                if (!(stackPointer == 0)) stackPointer--;
+                if (stackPointer == 0) stackPointer = stackSize - 1;
+                else stackPointer--;
                 break;
             default:
                 // if (strict) return null;
         }
         cmdPointer++;
     }
+
     public static String eval() {
         if (!check()) {
             toaster("BRACKET ERROR");
             return "";
         }
-		step = 0;
+        step = 0;
         while (cmdPointer <= cmd.length() - 1) {
             step();
-			step++;
-			if (step>10000) {toaster("timeout");return "";}
-            //view.setText(Interpreter.getStack());
+            step++;
+            if (step > cmd.length() * 10000) {
+                toaster("timeout " + step);
+                return "";
+            }
         }
         return stdOut;
     }
