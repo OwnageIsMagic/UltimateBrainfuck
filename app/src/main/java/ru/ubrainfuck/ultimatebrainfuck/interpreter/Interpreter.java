@@ -24,6 +24,7 @@ public class Interpreter {
     private static int stdinPointer = 0;
     private static boolean strict = false;
     private static boolean debuggable = false;
+    private static boolean checked = false;
     private static Context context;
 
     private Interpreter() {
@@ -39,17 +40,19 @@ public class Interpreter {
         }
         return out;
     }
+
+    public static int getStack(int pointer) {
+        return stack[pointer];
+    }
     public static int getStackSize() {
         return stackSize;
     }
     public static void setStackSize(int stackSize) {
         Interpreter.stackSize = stackSize;
     }
-
     public static int getStackPointer() {
         return stackPointer;
     }
-
     public static int getStep() {
         return step;
     }
@@ -104,18 +107,15 @@ public class Interpreter {
         cmdPointer = 0;
         stackPointer = 0;
         stdinPointer = 0;
+        step = 0;
+        checked = false;
         stdOut = "";
     }
 
-    public static String eval(String cmnd) {
-        cmd = cmnd;
-        return eval();
-    }
-
-    public static void step() {
-        if (cmdPointer >= cmd.length()) {
+    public static boolean step() {
+        if (cmdPointer >= cmd.length()) {//dead code
             toaster("END");
-            return;
+            return false;
         }
         switch (cmd.charAt(cmdPointer)) {
             case '+':
@@ -165,23 +165,25 @@ public class Interpreter {
                 // if (strict) return null;
         }
         cmdPointer++;
+        return true;
     }
 
-    public static String eval() {
-        if (!check()) {
-            toaster("BRACKET ERROR");
-            return "";
+    public static void eval() {
+        if (!checked) {
+            if (!check()) {
+                toaster("BRACKET ERROR");
+                return;
+            }
+            checked = !checked;
         }
-        step = 0;
         while (cmdPointer <= cmd.length() - 1) {
-            step();
-            step++;
+            if (step()) step++;
+            if (debuggable) return;
             if (step > cmd.length() * 10000) {
                 toaster("timeout " + step);
-                return "";
+                return;
             }
         }
-        return stdOut;
     }
 
     public static boolean check() {

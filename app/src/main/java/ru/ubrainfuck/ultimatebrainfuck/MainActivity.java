@@ -1,10 +1,14 @@
 package ru.ubrainfuck.ultimatebrainfuck;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,69 +18,90 @@ import ru.ubrainfuck.ultimatebrainfuck.interpreter.Interpreter;
 public class MainActivity extends Activity {
     EditText source;
     EditText stdIn;
-    TextView textView;
-    TextView textView2;
-    TextView textView3;
-    CheckBox checkBox;
-    TextView textView4;
-    TextView textView5;
-    TextView textView6;
+    CheckBox checkBoxD;
+    TextView stdout;
+    TextView stackView;
+    TextView propertiesView;
+    Button buttonRun;
+    Button buttonReset;
 
     /**
      * Called when the activity is first created.
      */
-    @SuppressLint("ShowToast")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         //android:theme="@style/AppTheme>"
-        source = (EditText) findViewById(R.id.mainEditTextInput);
-        stdIn = (EditText) findViewById(R.id.mainStdin);
-        textView = (EditText) findViewById(R.id.textView);
-        textView2 = (TextView) findViewById(R.id.textView2);
-        textView3 = (TextView) findViewById(R.id.textView3);
-        checkBox = (CheckBox) findViewById(R.id.checkBox);
-        //textView4 = (TextView) findViewById(R.id.textView4);
-        //textView5 = (TextView) findViewById(R.id.textView5);
-        //textView6 = (TextView) findViewById(R.id.textView6);
+        source = (EditText) findViewById(R.id.sourceEditText);
+        stdIn = (EditText) findViewById(R.id.stdinEditText);
+        stdout = (EditText) findViewById(R.id.stdoutTextView);
+        stackView = (TextView) findViewById(R.id.stackTextView);
+        propertiesView = (TextView) findViewById(R.id.propertiesTextView);
+        checkBoxD = (CheckBox) findViewById(R.id.checkBoxD);
+        buttonRun = (Button) findViewById(R.id.ButtonRun);
+        buttonReset = (Button) findViewById(R.id.ButtonReset);
+
         Interpreter.setContext(getApplicationContext());
     }
 
-    public void redraw() {
-        textView.setText(Interpreter.getStdOut());
-        textView2.setText(Interpreter.getStack());
-        textView3.setText(String.format("Stack pointer: %d\n" +
-                "Cmd Pointer:  %d\n" +
-                "Stdin Pointer: %d\n" +
-                "Step: %d", Interpreter.getStackPointer(), Interpreter.getCmdPointer(), Interpreter.getStdinPointer(), Interpreter.getStep()));
-    }
-
     public void clickRun(View view) {
-        Interpreter.reset();
-        if (checkBox.isChecked()) Interpreter.setDebuggable(true);
+        if (!checkBoxD.isChecked()) Interpreter.reset();
         Interpreter.setCmd(source.getText().toString());
         Interpreter.setStdIn(stdIn.getText().toString());
         Interpreter.eval();
         redraw();
     }
 
-    public void clickView(View view) {
-        //Toast.makeText(this, view.toString(), Toast.LENGTH_LONG).show();
-        Interpreter.setCmd(source.getText().toString());
-        Interpreter.step();
-        redraw();
+    private void showCursor() {
+        source.getText().clearSpans();
+        source.setText(source.getText().toString());
+        if (Interpreter.getCmdPointer() < source.getText().length()) {
+            SpannableString sourceText = new SpannableString(source.getText());
+            ForegroundColorSpan style = new ForegroundColorSpan(Color.RED);
+            sourceText.setSpan(style, Interpreter.getCmdPointer(), Interpreter.getCmdPointer() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            source.setText(sourceText);
+        }
+    }
+
+    public void redraw() {
+        if (checkBoxD.isChecked()) showCursor();
+        stdout.setText(Interpreter.getStdOut());
+        stackView.setText(Interpreter.getStack());
+        propertiesView.setText(String.format("Stack pointer: %d [%c]\n" +
+                        "Cmd Pointer:  %d [%c]\n" +
+                        "Stdin Pointer: %d [%c]\n" +
+                        "Step: %d\n",
+                Interpreter.getStackPointer(), (char) Interpreter.getStack(Interpreter.getStackPointer()),
+                Interpreter.getCmdPointer(), Interpreter.getCmd().charAt(Interpreter.getCmdPointer()),
+                Interpreter.getStdinPointer(), Interpreter.getStdIn().charAt(Interpreter.getStdinPointer()),
+                Interpreter.getStep()));
     }
 
     public void clickExit(View view) {
         finish();
     }
 
-    public void startBFI(View v) {
+    public void clickBFI(View v) {
         startActivity(new Intent(this, AnotherActivity.class));
     }
 
-    public void reset(View v) {
+    public void clickReset(View v) {
         Interpreter.reset();
+        redraw();
+    }
+
+    public void checkboxClick(View view) {
+        if (checkBoxD.isChecked()) {
+            buttonRun.setText("Step");
+            Interpreter.setDebuggable(true);
+            buttonReset.setVisibility(View.VISIBLE);
+
+        } else {
+            buttonRun.setText("Run");
+            Interpreter.setDebuggable(false);
+            buttonReset.setVisibility(View.INVISIBLE);
+        }
+
     }
 }

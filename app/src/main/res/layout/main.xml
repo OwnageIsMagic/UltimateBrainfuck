@@ -12,7 +12,7 @@
         android:layout_height="200dp"
 		android:inputType="textMultiLine"
 		android:layout_width="match_parent"
-		android:id="@+id/mainEditTextInput"
+        android:id="@+id/sourceEditText"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -20,9 +20,9 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:text="Source"
-        android:id="@+id/textSource"
+        android:id="@+id/sourceText"
         android:layout_width="wrap_content"
-        android:layout_below="@+id/mainEditTextInput"
+        android:layout_below="@+id/sourceEditText"
         android:layout_centerHorizontal="true" />
 
 	<EditText
@@ -30,9 +30,9 @@
         android:inputType="textMultiLine"
         android:ems="10"
         android:layout_width="wrap_content"
-        android:id="@+id/mainStdin"
+        android:id="@+id/stdinEditText"
         android:hint="Stdin"
-        android:layout_below="@+id/textSource"
+        android:layout_below="@+id/sourceText"
         android:layout_centerHorizontal="true" />
 
 	<LinearLayout
@@ -40,52 +40,56 @@
         android:layout_width="wrap_content"
         android:orientation="horizontal"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/mainStdin"
-        android:id="@+id/mainButtonRow">
+        android:layout_below="@+id/stdinEditText"
+        android:id="@+id/ButtonRow">
 
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkBox"
-            android:checked="false" />
+            android:id="@+id/checkBoxD"
+            android:checked="false"
+            android:onClick="checkboxClick"
+            android:text="D" />
 
         <Button
             android:layout_height="wrap_content"
             android:text="@string/exit"
             android:layout_width="wrap_content"
-            android:id="@+id/mainButtonExit"
+            android:id="@+id/ButtonExit"
             android:onClick="clickExit" />
 
         <Button
             android:layout_height="wrap_content"
             android:text="@string/run"
             android:layout_width="wrap_content"
-            android:onClick="clickRun"
-            android:id="@+id/mainButtonRun" />
+            android:id="@+id/ButtonRun"
+            android:onClick="clickRun" />
 
         <Button
             android:layout_height="wrap_content"
             android:text="BF I"
             android:layout_width="wrap_content"
-            android:onClick="startBFI"
-            android:id="@+id/mainButtonBFI" />
+            android:onClick="clickBFI"
+            android:id="@+id/ButtonBFI"
+            android:visibility="gone" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Reset"
-            android:id="@+id/mainButtonReset"
-            android:onClick="reset" />
+            android:id="@+id/ButtonReset"
+            android:onClick="clickReset"
+            android:visibility="invisible" />
 
     </LinearLayout>
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
+        android:id="@+id/stdoutTextView"
         android:singleLine="false"
         android:hint="Output"
-        android:layout_below="@+id/mainButtonRow"
+        android:layout_below="@+id/ButtonRow"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -93,11 +97,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Stack pointer: %d\nCmdPointer:    %d\nStdinPointer:  %d\nStep: %d"
-        android:id="@+id/textView3"
-        android:onClick="clickView"
+        android:id="@+id/propertiesTextView"
         android:clickable="true"
         android:singleLine="false"
-        android:layout_below="@+id/textView"
+        android:layout_below="@+id/stdoutTextView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -105,13 +108,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Stack"
-        android:id="@+id/textView2"
-        android:onClick="clickView"
+        android:id="@+id/stackTextView"
         android:clickable="true"
         android:singleLine="false"
-        android:layout_below="@+id/textView"
-        android:layout_toRightOf="@+id/textView3"
-        android:layout_alignBottom="@+id/textView3"
+        android:layout_below="@+id/stdoutTextView"
+        android:layout_toRightOf="@+id/propertiesTextView"
+        android:layout_alignBottom="@+id/propertiesTextView"
         android:layout_marginLeft="10dp" />
 
 </RelativeLayout>
